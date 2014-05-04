@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Habitat.Core</id>
+    <version>$version$</version>
+    <title>Habitat.Core</title>
+    <authors>Ben Peterson</authors>
+    <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      Shared code for the Habitat config system.  Includes:
+      -Micro durable document repository implementation
+      -File system facade built around SystemWrapper
+      -Config data DTOs for easy serialization/deserialization
+    </description>
+    <summary>Shared code for the Habitat config system.</summary>
+    <releaseNotes>
+    </releaseNotes>
+    <copyright>2014</copyright>
+    <language>en-US</language>
+    <tags>Habitat Library</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="[6.0,7.0)" />
+      <dependency id="SystemWrapper-sn" version="[0.5.3]" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="$binfolder$Habitat.Core.dll" target="lib\net40" />
+  </files>
+</package>
