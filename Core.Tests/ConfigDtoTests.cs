@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using KellermanSoftware.CompareNetObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using ProTeck.Config.Dto.V1;
 
-namespace ProTeck.Config.Dto.Tests
+namespace Habitat.Core.Tests
 {
     [TestClass]
     public class ConfigDtoTests
@@ -13,7 +12,7 @@ namespace ProTeck.Config.Dto.Tests
         /// <summary>
         /// Object used for deep compare operations on object graphs
         /// </summary>
-        private readonly CompareObjects _objectComparer = new CompareObjects();
+        private readonly CompareLogic _objectComparer = new CompareLogic();
 
         [TestMethod]
         public void Should_be_able_to_serialize_empty_config_node()
@@ -21,7 +20,7 @@ namespace ProTeck.Config.Dto.Tests
             var originalNode = new ConfigNode();
             string json = JsonConvert.SerializeObject(originalNode);
             var deserializedNode = JsonConvert.DeserializeObject<ConfigNode>(json);
-            Assert.IsTrue(_objectComparer.Compare(originalNode, deserializedNode));
+            Assert.IsTrue(_objectComparer.Compare(originalNode, deserializedNode).AreEqual);
         }
 
         [TestMethod]
@@ -39,7 +38,7 @@ namespace ProTeck.Config.Dto.Tests
 
             string json = JsonConvert.SerializeObject(originalNode);
             var deserializedNode = JsonConvert.DeserializeObject<ConfigNode>(json);
-            Assert.IsTrue(_objectComparer.Compare(originalNode, deserializedNode));
+            Assert.IsTrue(_objectComparer.Compare(originalNode, deserializedNode).AreEqual);
         }
 
         [TestMethod]
@@ -81,7 +80,7 @@ namespace ProTeck.Config.Dto.Tests
 
             string json = JsonConvert.SerializeObject(originalNode);
             var deserializedNode = JsonConvert.DeserializeObject<ConfigNode>(json);
-            Assert.IsTrue(_objectComparer.Compare(originalNode, deserializedNode));
+            Assert.IsTrue(_objectComparer.Compare(originalNode, deserializedNode).AreEqual);
         }
 
         [TestMethod]
@@ -102,7 +101,7 @@ namespace ProTeck.Config.Dto.Tests
 
             string json = JsonConvert.SerializeObject(originalNode);
             var deserializedNode = JsonConvert.DeserializeObject<ConfigNode>(json);
-            Assert.IsTrue(_objectComparer.Compare(originalNode, deserializedNode));
+            Assert.IsTrue(_objectComparer.Compare(originalNode, deserializedNode).AreEqual);
         }
 
         [TestMethod]
@@ -124,7 +123,7 @@ namespace ProTeck.Config.Dto.Tests
             expectedDictionary["N1.N3"] = "V3";
             expectedDictionary["N1.N4"] = "V4";
 
-            Assert.IsTrue(_objectComparer.Compare(expectedDictionary, node.ToDictionary()));
+            Assert.IsTrue(_objectComparer.Compare(expectedDictionary, node.ToDictionary()).AreEqual);
         }
 
         [TestMethod]
@@ -164,7 +163,7 @@ namespace ProTeck.Config.Dto.Tests
             expectedDictionary[".N3"] = "V3";
             expectedDictionary[".N4"] = "V4";
 
-            Assert.IsTrue(_objectComparer.Compare(expectedDictionary, node.ToDictionary()));
+            Assert.IsTrue(_objectComparer.Compare(expectedDictionary, node.ToDictionary()).AreEqual);
         }
 
         [TestMethod]
@@ -185,7 +184,7 @@ namespace ProTeck.Config.Dto.Tests
             expectedDictionary[".N3"] = "V3";
             expectedDictionary[".N4"] = "V4";
 
-            Assert.IsTrue(_objectComparer.Compare(expectedDictionary, node.ToDictionary()));
+            Assert.IsTrue(_objectComparer.Compare(expectedDictionary, node.ToDictionary()).AreEqual);
         }
 
         [TestMethod]
@@ -234,7 +233,7 @@ namespace ProTeck.Config.Dto.Tests
             expectedDictionary["N1.N3.N6"] = "V6";
             expectedDictionary["N1.N3.N6.N8"] = "V8";
 
-            Assert.IsTrue(_objectComparer.Compare(expectedDictionary, originalNode.ToDictionary()));
+            Assert.IsTrue(_objectComparer.Compare(expectedDictionary, originalNode.ToDictionary()).AreEqual);
         }
 
         [TestMethod]
@@ -243,7 +242,7 @@ namespace ProTeck.Config.Dto.Tests
             var originalRoot = new ConfigRoot();
             string json = JsonConvert.SerializeObject(originalRoot);
             var deserializedRoot = JsonConvert.DeserializeObject<ConfigRoot>(json);
-            Assert.IsTrue(_objectComparer.Compare(originalRoot, deserializedRoot));
+            Assert.IsTrue(_objectComparer.Compare(originalRoot, deserializedRoot).AreEqual);
         }
 
         [TestMethod]
@@ -265,7 +264,7 @@ namespace ProTeck.Config.Dto.Tests
 
             string json = JsonConvert.SerializeObject(originalRoot);
             var deserializedRoot = JsonConvert.DeserializeObject<ConfigRoot>(json);
-            Assert.IsTrue(_objectComparer.Compare(originalRoot, deserializedRoot));
+            Assert.IsTrue(_objectComparer.Compare(originalRoot, deserializedRoot).AreEqual);
         }
 
         private static ConfigNode CreateValueNode(int suffix)

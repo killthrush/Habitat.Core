@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using SystemInterface.IO;
@@ -52,12 +51,23 @@ namespace Habitat.Core
         /// <summary>
         /// Regular expression used to identify JSON data files
         /// </summary>
-        private readonly Regex _dataFileNamePattern = new Regex(@"^(\d{10})_" + Regex.Escape(typeof(T).ToString()) + ".json$");
+        private readonly Regex _dataFileNamePattern = new Regex(@"^(\d{10})_" + Regex.Escape(typeof (T).ToString()) + ".json$");
 
         /// <summary>
         /// List used to record the items that need to be deleted from disk on a Save
         /// </summary>
         private readonly List<IJsonEntity<T>> _deleteList = new List<IJsonEntity<T>>();
+
+        /// <summary>
+        /// The full path to the location where the JSON repository will be stored.
+        /// </summary>
+        /// <remarks>
+        /// Use of this respository requires that consumers have appropriate read/write access to this path
+        /// </remarks>
+        public string Path
+        {
+            get { return _path; }
+        }
 
         /// <summary>
         /// Creates an instance of a DurableMemoryRepository
@@ -81,7 +91,7 @@ namespace Habitat.Core
             _readWriteLock.EnterWriteLock();
             try
             {
-                 _fileFacade.CreateDirectoryIfNotExists(_path);
+                _fileFacade.CreateDirectoryIfNotExists(_path);
                 InitializeNextAvailableId();
                 InitializeDictionary();
             }
@@ -296,7 +306,7 @@ namespace Habitat.Core
         private string GetDataFilePath(IJsonEntity<T> jsonEntity)
         {
             var dataFileName = string.Format("{0:d10}_" + typeof (T) + ".json", jsonEntity.Id);
-            return Path.Combine(_path, dataFileName);
+            return System.IO.Path.Combine(_path, dataFileName);
         }
     }
 }

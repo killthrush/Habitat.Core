@@ -6,7 +6,6 @@
     <Publish>false</Publish>
     <NuGetUrl>http://appserver/Nuget/</NuGetUrl>
   </PropertyGroup>-->
-
   <Target Name="CreateNuGetPackage">
     <PropertyGroup>
       <ComponentBaseVersion>0.0.0</ComponentBaseVersion>
@@ -23,10 +22,34 @@
                                            XPath="/Versions/Version[last()]/@number" Condition="Exists('$(SolutionDir)\version.xml')">
       <Output PropertyName="ComponentBaseVersion" TaskParameter="Value" />
     </MSBuild.ExtensionPack.Xml.XmlFile>
-    <CreateItem Include="$(MSBuildProjectDirectory)\*.nuspec">
+    <MSBuild.ExtensionPack.Xml.XmlFile TaskAction="ReadElements" ReadChildrenToMetadata="true" File="$(SolutionDir)\version.xml"
+                                       XPath="/Versions/Version[last()]" Condition="Exists('$(SolutionDir)\version.xml')">
+      <Output ItemName="ReleaseNotesList" TaskParameter="Elements" />
+    </MSBuild.ExtensionPack.Xml.XmlFile>
+    <CreateItem Include="%(ReleaseNotesList.ReleaseNotes)">
+      <Output TaskParameter="Include" ItemName="ReleaseNotesSection"/>
+    </CreateItem>
+    <PropertyGroup>
+      <ReleaseNotesText>@(ReleaseNotesSection, '')</ReleaseNotesText>
+    </PropertyGroup>
+    <Message Text="ReleaseNotesText: $(ReleaseNotesText)" />
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\NuGetPackage.nuspec">
       <Output TaskParameter="Include" ItemName="NuspecFile" />
     </CreateItem>
     <Message Text="NuspecFile:@(NuspecFile)" />
+
+    <!-- Seems pretty much impossible to include release notes via command line, so we'll just update the nuspec directly on build. -->
+    <ItemGroup>
+      <Namespaces Include="NuSpecNamespace">
+        <Prefix>x</Prefix>
+        <Uri>http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd</Uri>
+      </Namespaces>
+    </ItemGroup>
+    <MSBuild.ExtensionPack.Xml.XmlFile TaskAction="UpdateElement" File="@(NuspecFile)"
+                                   XPath="/x:package/x:metadata/x:releaseNotes" InnerText="$(ReleaseNotesText)" Namespaces="@(Namespaces)">
+    </MSBuild.ExtensionPack.Xml.XmlFile>
+    
     <!--Delete existing .nupkg files-->
     <CreateItem Include="$(MSBuildProjectDirectory)\*.nupkg">
       <Output TaskParameter="Include" ItemName="OldPackageFiles" />

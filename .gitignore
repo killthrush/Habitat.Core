@@ -175,5 +175,6 @@ UpgradeLog*.htm
 FakesAssemblies/
 
 **/AssemblyInfo.cs
+![Sn]u[Gg]et[Bb]uild/Properties/AssemblyInfo.cs
 */_AssemblyInfo.cs
 *.nupkg
